@@ -1,0 +1,15 @@
+express
+mongoose
+cors
+dotenv
+
+
+
+dev devendencies  
+    nodemon -D
+
+
+
+
+
+cors= sirve para la comunicación del backend -frontend
