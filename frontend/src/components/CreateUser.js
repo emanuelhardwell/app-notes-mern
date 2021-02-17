@@ -20,7 +20,7 @@ export const CreateUser = () => {
     <div className="row">
       <div className="col-md-4">
         <div className="card">
-          <div className="card-header">
+          <div className="card-header bg-primary">
             <h3>Create new user</h3>
           </div>
           <div className="card-body">
@@ -42,7 +42,7 @@ export const CreateUser = () => {
       </div>
       <div className="col-md-8">
         <ul className="list-group">
-          <li className="list-group-item text-center">Lis of users</li>
+          <li className="list-group-item text-center bg-primary">Lis of users</li>
           {user.map((u) => (
             <li className="list-group-item list-group-item-action" key={u._id}>
               {u.username}
