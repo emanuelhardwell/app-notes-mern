@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ReactDatePicker from "react-datepicker";
+/* import ReactDatePicker from "react-datepicker"; */
 
 export const CreateNote = () => {
   /*  */
@@ -14,14 +14,15 @@ export const CreateNote = () => {
     date: new Date(),
   });
 
-  const { users, userSelected, date } = user;
+  const { users, userSelected, date, title, content } = user;
 
   const getData = async () => {
     const { data } = await axios.get("http://localhost:5000/api/users");
-    /* console.log(data); */
+    /* console.log(data[0].username); */
     setUser({
       ...user,
       users: data,
+      userSelected: data[0].username,
     });
   };
 
@@ -43,9 +44,17 @@ export const CreateNote = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    const newNote = {
+      title: title,
+      content: content,
+      date: date,
+      author: userSelected,
+    };
+
+    await axios.post("http://localhost:5000/api/notes", newNote);
+    window.location.href = "/";
   };
 
   return (
@@ -95,6 +104,9 @@ export const CreateNote = () => {
                   selected={date}
                   onChange={handleChangeDatePicker}
                 />
+              </div>
+              <div className="form-group">
+                <button className="btn btn-primary w-100">Save user</button>
               </div>
             </form>
           </div>
