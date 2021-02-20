@@ -54,7 +54,7 @@ export const CreateUser = () => {
   return (
     /*  */
     <div className="row">
-      <div className="col-md-4">
+      <div className="col-md-4 p-2">
         <div className="card">
           <div className="card-header bg-primary">
             <h3>Create new user</h3>
