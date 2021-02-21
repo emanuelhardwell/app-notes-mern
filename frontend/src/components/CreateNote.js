@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 /* import ReactDatePicker from "react-datepicker"; */
 
-export const CreateNote = () => {
+export const CreateNote = (props) => {
   /*  */
   const [user, setUser] = useState({
     users: [],
@@ -12,18 +12,39 @@ export const CreateNote = () => {
     title: "",
     content: "",
     date: new Date(),
+    /*datos generados  */
+    editing: false,
+    id: "",
   });
 
-  const { users, userSelected, date, title, content } = user;
+  const { users, userSelected, date, title, content, editing, id } = user;
 
   const getData = async () => {
     const { data } = await axios.get("http://localhost:5000/api/users");
     /* console.log(data[0].username); */
     setUser({
       ...user,
-      users: data,
+      /* users: data, */
+      users: data.map((user) => user.username),
       userSelected: data[0].username,
     });
+
+    if (props.match.params.id) {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/notes/${props.match.params.id}`
+      );
+
+      console.log(data);
+      setUser({
+        ...user,
+        editing: true,
+        id: props.match.params.id,
+        title: data.title,
+        userSelected: data.author,
+        content: data.content,
+        date: new Date(data.date),
+      });
+    }
   };
 
   useEffect(() => {
@@ -52,9 +73,14 @@ export const CreateNote = () => {
       date: date,
       author: userSelected,
     };
+    if (editing) {
+      await axios.put(`http://localhost:5000/api/notes/${id}`, newNote);
+    } else {
+      await axios.post("http://localhost:5000/api/notes", newNote);
+    }
 
-    await axios.post("http://localhost:5000/api/notes", newNote);
-    window.location.href = "/";
+    /*  window.location.href = "/"; */
+    props.history.push("/");
   };
 
   return (
@@ -70,11 +96,12 @@ export const CreateNote = () => {
                 <select
                   name="userSelected"
                   className="form-control"
+                  value={userSelected}
                   onChange={handleChange}
                 >
-                  {users.map((user) => (
-                    <option key={user._id} value={user.username}>
-                      {user.username}
+                  {users.map((username) => (
+                    <option key={username} value={username}>
+                      {username}
                     </option>
                   ))}
                 </select>
@@ -86,6 +113,7 @@ export const CreateNote = () => {
                   className="form-control"
                   placeholder="title"
                   required
+                  value={title}
                   onChange={handleChange}
                 />
               </div>
@@ -95,6 +123,7 @@ export const CreateNote = () => {
                   className="form-control"
                   placeholder="content"
                   required
+                  value={content}
                   onChange={handleChange}
                 ></textarea>
               </div>

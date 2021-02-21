@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { format } from "timeago.js";
+import { Link } from "react-router-dom";
 
 export const NotesList = () => {
   const [stateNotes, setStateNotes] = useState({
@@ -41,14 +42,16 @@ export const NotesList = () => {
                 <p className="card-text"> {content} </p>
                 <p className="blockquote-footer"> {format(date)} </p>
               </div>
-              <div className="card-footer">
+              <div className="card-footer d-flex justify-content-between">
                 <button
                   className="btn btn-danger btn-sm"
                   onClick={() => handleDelete(_id)}
                 >
                   Delete
                 </button>
-                <button className="btn btn-success btn-sm">Update</button>
+                <Link className="btn btn-success btn-sm" to={`/edit/${_id}`}>
+                  Update
+                </Link>
               </div>
             </div>
           </div>

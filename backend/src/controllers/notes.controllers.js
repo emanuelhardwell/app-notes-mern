@@ -27,8 +27,8 @@ notesCtrl.getNote = async (req, res) => {
 };
 
 notesCtrl.updateNote = async (req, res) => {
-  const { title, content, author } = req.body;
-  await Note.findByIdAndUpdate(req.params.id, { title, content, author });
+  const { title, content, author, date } = req.body;
+  await Note.findByIdAndUpdate(req.params.id, { title, content, author, date });
   res.json({ message: "Note UPDATE Successfully" });
 };
 
