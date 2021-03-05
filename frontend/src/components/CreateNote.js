@@ -17,18 +17,20 @@ export const CreateNote = (props) => {
     id: "",
   });
 
-  const { users, userSelected, date, title, content, editing, id } = user;
+  const { users, userSelected, title, content, date, editing, id } = user;
+  console.log(user.users, "---------");
 
   const getData = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/users");
+    const res = await axios.get("http://localhost:5000/api/users");
     /* console.log(data[0].username); */
     setUser({
       ...user,
-      /* users: data, */
-      users: data.map((user) => user.username),
-      userSelected: data[0].username,
+      users: res.data.map((user) => user.username),
+      userSelected: res.data[0].username,
     });
+    console.log(res);
 
+    console.log(users, "dentro de getData");
     if (props.match.params.id) {
       const { data } = await axios.get(
         `http://localhost:5000/api/notes/${props.match.params.id}`
@@ -37,13 +39,15 @@ export const CreateNote = (props) => {
       console.log(data);
       setUser({
         ...user,
+        users: res.data.map((user) => user.username),
         editing: true,
-        id: props.match.params.id,
+        id: data._id,
         title: data.title,
         userSelected: data.author,
         content: data.content,
         date: new Date(data.date),
       });
+      console.log(user.users, "getDaata Update");
     }
   };
 
